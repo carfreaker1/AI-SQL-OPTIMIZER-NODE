@@ -1,0 +1,128 @@
+================================================================================
+                    AI-SQL-OPTIMIZER-NODE : UNOPTIMIZED SQL EXAMPLES
+================================================================================
+
+Copy and paste any of the following unoptimized queries into the AI SQL Optimizer
+chat box in your browser (http://localhost:5173/) to test query optimization,
+index recommendations, performance issue detection, and target format conversion!
+
+--------------------------------------------------------------------------------
+EXAMPLE 1: Correlated Subqueries in SELECT (N+1 Query Bottleneck)
+--------------------------------------------------------------------------------
+WHY IT IS UNOPTIMIZED:
+  - For every user row returned, MySQL/PostgreSQL must execute two separate
+    subqueries (`COUNT(*)` and `MAX(created_at)`) against the orders table.
+  - On a table of 10,000 active users, this results in 20,001 queries executed!
+  - FIX: Use a single LEFT JOIN with GROUP BY.
+
+COPY-PASTE TEST QUERY:
+SELECT 
+  u.id, 
+  u.name, 
+  (SELECT COUNT(*) FROM orders o WHERE o.user_id = u.id) AS total_orders,
+  (SELECT MAX(created_at) FROM orders o WHERE o.user_id = u.id) AS last_order_date
+FROM users u
+WHERE u.status = 'active';
+
+
+--------------------------------------------------------------------------------
+EXAMPLE 2: Using SELECT * with Leading Wildcards (Full Table Scan)
+--------------------------------------------------------------------------------
+WHY IT IS UNOPTIMIZED:
+  - `SELECT *` retrieves all columns (even large text/BLOB fields not needed).
+  - Using a leading wildcard (`LIKE '%laptop%'`) prevents the database from using
+    any B-tree index on the column, forcing an expensive full table scan.
+  - FIX: Specify only required columns and use FULLTEXT indexing or prefix search.
+
+COPY-PASTE TEST QUERY:
+SELECT * 
+FROM products p
+WHERE p.name LIKE '%laptop%' 
+   OR p.description LIKE '%gaming%' 
+ORDER BY p.created_at DESC;
+
+
+--------------------------------------------------------------------------------
+EXAMPLE 3: Function on an Indexed Column in WHERE Clause (Non-SARGable)
+--------------------------------------------------------------------------------
+WHY IT IS UNOPTIMIZED:
+  - Wrapping `created_at` inside SQL functions (`YEAR()`, `MONTH()`) makes the
+    condition non-SARGable (Search Argument Able), meaning indexes are ignored.
+  - FIX: Compare the column directly against a date range using `>=` and `<`.
+
+COPY-PASTE TEST QUERY:
+SELECT user_id, amount, created_at
+FROM transactions
+WHERE YEAR(created_at) = 2025 AND MONTH(created_at) = 7;
+
+
+--------------------------------------------------------------------------------
+EXAMPLE 4: Redundant DISTINCT with IN Subquery & Implicit Comma Join
+--------------------------------------------------------------------------------
+WHY IT IS UNOPTIMIZED:
+  - Uses outdated comma join syntax (`FROM customers c, orders o`).
+  - Uses an inefficient `IN` subquery (`c.id IN (SELECT ...)`), which can cause
+    high memory usage or table scans.
+  - Uses `DISTINCT` as a band-aid to remove duplicates caused by improper joins.
+  - FIX: Use an explicit `INNER JOIN` or `EXISTS` clause without `DISTINCT`.
+
+COPY-PASTE TEST QUERY:
+SELECT DISTINCT c.id, c.first_name, c.last_name, c.email
+FROM customers c, orders o
+WHERE c.id = o.customer_id
+  AND c.id IN (SELECT customer_id FROM payments WHERE amount > 500);
+
+
+--------------------------------------------------------------------------------
+EXAMPLE 5: Filtering Rows in HAVING Instead of WHERE
+--------------------------------------------------------------------------------
+WHY IT IS UNOPTIMIZED:
+  - `HAVING` is evaluated *after* `GROUP BY` aggregation has already processed all
+    rows. Filtering non-aggregate columns (`status = 'full_time'`) inside `HAVING`
+    wastes CPU and memory by grouping unnecessary rows first.
+  - FIX: Move non-aggregate filtering (`status = 'full_time'`) into the `WHERE`
+    clause before grouping.
+
+COPY-PASTE TEST QUERY:
+SELECT department_id, COUNT(*) as employee_count, AVG(salary) as avg_salary
+FROM employees
+GROUP BY department_id
+HAVING status = 'full_time' AND employee_count > 10;
+
+
+--------------------------------------------------------------------------------
+EXAMPLE 6: Implicit Data Type Conversion (Type Casting in Filter)
+--------------------------------------------------------------------------------
+WHY IT IS UNOPTIMIZED:
+  - Assuming `customer_phone` is stored as a `VARCHAR`/string column in the database,
+    comparing it to an integer literal (`9876543210`) forces the database to convert
+    every string value in the column to an integer on the fly.
+  - This disables index lookups and causes full table scans.
+  - FIX: Pass the filter as a string literal (`'9876543210'`).
+
+COPY-PASTE TEST QUERY:
+SELECT order_id, customer_id, total_amount
+FROM orders
+WHERE customer_phone = 9876543210;
+
+
+--------------------------------------------------------------------------------
+EXAMPLE 7: Unindexed Derived Table Join with Repetitive Aggregate Subquery
+--------------------------------------------------------------------------------
+WHY IT IS UNOPTIMIZED:
+  - Joins an unindexed inline subquery/derived table (`SELECT ... FROM departments`).
+  - Computes `(SELECT AVG(salary) FROM employees)` repeatedly or scans tables
+    without filtering early.
+  - FIX: Use standard `INNER JOIN` with indexed foreign keys and CTEs if needed.
+
+COPY-PASTE TEST QUERY:
+SELECT e.id, e.name, d.department_name
+FROM employees e
+INNER JOIN (
+  SELECT id, department_name FROM departments WHERE active = 1
+) d ON e.dept_id = d.id
+WHERE e.salary > (SELECT AVG(salary) FROM employees);
+
+================================================================================
+                           END OF EXAMPLES FILE
+================================================================================

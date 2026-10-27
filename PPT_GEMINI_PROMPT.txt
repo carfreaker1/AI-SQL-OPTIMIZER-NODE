@@ -1,0 +1,47 @@
+================================================================================
+           PROMPT TO GENERATE A 6-SLIDE MINI PROJECT PPT IN GEMINI
+================================================================================
+
+Copy the text between the dashed lines below and paste it directly into Gemini
+(or ChatGPT, Claude, Microsoft Copilot, or PowerPoint AI generator) to create a
+complete, highly professional 6-slide PowerPoint presentation for Swastika Rai.
+
+------------------------------- COPY BELOW -------------------------------------
+
+You are an expert academic presentation designer and software architecture consultant.
+Please generate the complete slide-by-slide content for a professional 6-slide PowerPoint (PPT) presentation for an MCA (Master of Computer Applications) Mini Project.
+
+Here are the project and student details:
+- Project Title: AI-Powered SQL Query Optimizer & Target Format Converter
+- Student Name: Swastika Rai
+- Program: MCA (Master of Computer Applications)
+- Subject: Mini Project Presentation
+- Technology Stack:
+  * Frontend: React 19 + Vite + Lucide Icons + Axios (Chat-based UI with syntax highlighting)
+  * Backend: Node.js + Fastify (High-speed REST API)
+  * Caching Layer: Redis Server (MD5 query hashing with 3600s TTL)
+  * AI Engine: Groq Cloud API using Llama 3.3 70B Versatile model (Structured JSON responses)
+- Key Features:
+  * Automated SQL Query Optimization (fixing N+1 queries, full table scans, non-SARGable WHERE clauses)
+  * Database Index Recommendations
+  * Bottleneck & Issue Detection with Explain Summary
+  * Multi-Target Query Conversion (SQL to Prisma, TypeORM, MongoDB, etc.)
+  * Intelligent Redis Caching (instant cache hits for repeated queries)
+
+Please generate exactly 6 slides with the following structure for each slide:
+1. Slide Number & Title
+2. Key Bullet Points (concise, professional, and impactful academic tone)
+3. Slide Layout & Visual/Diagram Suggestion (what boxes, icons, or code snippets to display on the slide)
+4. Speaker Notes (what Swastika Rai should say while presenting this slide to the external examiner/professor)
+
+Slide Outline Required:
+- Slide 1: Title Slide (Project Title, Student Name Swastika Rai, MCA Mini Project, Academic Term)
+- Slide 2: Problem Statement & Objective (Why SQL optimization is difficult and how this tool solves it)
+- Slide 3: System Architecture & Tech Stack (Frontend, Backend, Redis Caching, Groq Llama 3.3 70B AI Engine)
+- Slide 4: Key Features & Caching Mechanism (How MD5 Redis caching and structured AI JSON output work)
+- Slide 5: Real-World Query Example (Before vs. After optimization: e.g., N+1 Correlated Subquery to LEFT JOIN)
+- Slide 6: Conclusion & Future Scope (Academic summary and future enhancements like EXPLAIN ANALYZE and IDE plugins)
+
+Please ensure the content looks highly polished, technical, and impressive for a Master of Computer Applications project evaluation.
+
+------------------------------- COPY ABOVE -------------------------------------
