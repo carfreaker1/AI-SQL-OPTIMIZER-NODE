@@ -8,7 +8,10 @@ const app = Fastify({ logger: true });
 
 // CORS
 await app.register(cors, {
-  origin: "https://ai-sql-optimizer-node-1.onrender.com/" || "http://localhost:5173",
+  origin: [
+    "http://localhost:5173",
+    "https://ai-sql-optimizer-node-1.onrender.com/",
+  ],
 });
 
 // SQL Optimizer routes
