@@ -4,17 +4,21 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import sqlRoutes from "./routes/sql.route.js";
 
-const app = Fastify({ logger: true });
+const app = Fastify({
+  logger: true,
+});
 
-// CORS
+// CORS configuration
 await app.register(cors, {
   origin: [
     "http://localhost:5173",
-    "https://ai-sql-optimizer-node-1.onrender.com/",
+    "https://ai-sql-optimizer-node-1.onrender.com",
   ],
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 });
 
-// SQL Optimizer routes
+// Register routes
 await app.register(sqlRoutes, {
   prefix: "/api/sql",
 });
@@ -27,10 +31,15 @@ app.get("/", async () => {
   };
 });
 
-// Dynamic port for Vercel
+// Start server
 const PORT = Number(process.env.PORT || 5000);
 
-await app.listen({
-  port: PORT,
-  host: "0.0.0.0",
-});
+try {
+  await app.listen({
+    port: PORT,
+    host: "0.0.0.0",
+  });
+} catch (error) {
+  app.log.error(error);
+  process.exit(1);
+}
