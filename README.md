@@ -6,14 +6,6 @@ This project optimizes SQL queries for better performance (node.js, react, redis
 ## Screenshot
 ![App Screenshot](image.png)
 
-## Academic Project Report
-The report follows the eight-chapter structure of the supplied sample and documents the actual implementation, architecture, requirements, testing plan, limitations, and references.
-
-- [Download the editable Word report](reports/AI_SQL_Optimizer_Project_Report.docx)
-- [Read or edit the full report text](reports/README.md)
-
-Replace the cover-page placeholders with your student, institution, guide, and academic-session details before submission. Testing plans and illustrative SQL examples are clearly distinguished from verified runtime results.
-
 ## Setup & How to Run
 For full, detailed step-by-step instructions on setting up and running the project (Redis, Backend, and Frontend), see [SETUP_AND_RUN_GUIDE.txt](SETUP_AND_RUN_GUIDE.txt).
 
