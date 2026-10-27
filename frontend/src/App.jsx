@@ -5,7 +5,7 @@ import ChatWindow from './components/ChatWindow';
 import ChatInput from './components/ChatInput';
 import './App.css';
 
-const API_URL = 'http://localhost:5000/api/sql/optimize';
+const API_URL = 'https://ai-sql-optimizer-node.onrender.com/api/sql/optimize';
 
 function App() {
   const [messages, setMessages] = useState([]);
