@@ -4,7 +4,9 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import sqlRoutes from "./routes/sql.route.js";
 
-const app = Fastify({ logger: true });
+const app = Fastify({
+  logger: true,
+});
 
 // CORS configuration
 await app.register(cors, {
@@ -19,7 +21,7 @@ await app.register(cors, {
   allowedHeaders: ["Content-Type", "Authorization"],
 });
 
-// SQL Optimizer routes
+// Register routes
 await app.register(sqlRoutes, {
   prefix: "/api/sql",
 });
